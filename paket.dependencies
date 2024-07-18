@@ -1,44 +1,43 @@
 source https://api.nuget.org/v3/index.json
-framework: netstandard2.0, net45
+framework: netstandard2.0
 storage: none
 
 github eiriktsarpalis/TypeShape:8.0.0 src/TypeShape/TypeShape.fs
-nuget FSharp.Core >= 4.3.2 lowest_matching: true
-nuget System.Reflection.Emit.Lightweight >= 4.3 lowest_matching:true, framework:netstandard2.0
-nuget Newtonsoft.Json >= 10.0.1 lowest_matching:true
+nuget FSharp.Core
+nuget System.Reflection.Emit.Lightweight
+nuget Newtonsoft.Json
 
 nuget Microsoft.SourceLink.GitHub copy_local:true
 
 group Testing
-  framework: netcoreapp3.1, net472
+  framework: net8.0
   source https://api.nuget.org/v3/index.json
   storage: none
 
-  nuget FSharp.Core ~> 4.7
+  nuget FSharp.Core
 
-  nuget NUnit ~> 3.9.0
-  nuget NUnit3TestAdapter ~> 3.9.0 version_in_path: true
-  nuget Microsoft.NET.Test.Sdk ~> 15.0
-  nuget FsCheck ~> 3.0 prerelease
-  nuget FsUnit ~> 3.0
+  nuget NUnit
+  nuget NUnit3TestAdapter version_in_path: true
+  nuget Microsoft.NET.Test.Sdk
+  nuget FsCheck
+  nuget FsUnit
 
   nuget BenchmarkDotNet
-  nuget Wire
   nuget protobuf-net
   nuget Newtonsoft.Json
-  
+
 group Build
   source https://api.nuget.org/v3/index.json
   generate_load_scripts: true
   framework: netstandard2.0
   storage: none
 
-  nuget Fake.Core.UserInput	    ~> 5.19.0
-  nuget Fake.Core.ReleaseNotes  ~> 5.19.0
-  nuget Fake.Core.Target        ~> 5.19.0
-  nuget Fake.IO.FileSystem      ~> 5.19.0
-  nuget Fake.DotNet.Cli	        ~> 5.19.0
-  nuget Fake.Tools.Git          ~> 5.19.0
-  nuget Fake.Api.Github         ~> 5.19.0
+  nuget Fake.Core.UserInput
+  nuget Fake.Core.ReleaseNotes
+  nuget Fake.Core.Target
+  nuget Fake.IO.FileSystem
+  nuget Fake.DotNet.Cli
+  nuget Fake.Tools.Git
+  nuget Fake.Api.Github
 
-  nuget FSharp.Formatting ~> 4.0 prerelease storage: packages
+  nuget FSharp.Formatting

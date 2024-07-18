@@ -14,10 +14,10 @@ open MBrace.FsPickler.ReflectionCache
 type Pickler internal (t : Type) =
 
     let typeKind = Kind.compute t
-    let isRecursive = 
+    let isRecursive =
         try isRecursiveType false t
-        with 
-        | PolymorphicRecursiveException t' when t = t' -> 
+        with
+        | PolymorphicRecursiveException t' when t = t' ->
             let msg = "type is polymorphic recursive."
             raise <| NonSerializableTypeException(t, msg)
         | PolymorphicRecursiveException t' ->
@@ -128,8 +128,8 @@ and [<AutoSerializable(false); Sealed>]
         cyclicObjects.Clear()
 
 and [<AutoSerializable(false); Sealed>]
-    ReadState internal (formatter : IPickleFormatReader, resolver : IPicklerResolver, reflectionCache : ReflectionCache, 
-                            disableSubtypes : bool, disableAssemblyLoading : bool, ?streamingContext : StreamingContext, 
+    ReadState internal (formatter : IPickleFormatReader, resolver : IPicklerResolver, reflectionCache : ReflectionCache,
+                            disableSubtypeResolution : bool, disableAssemblyLoading : bool, ?streamingContext : StreamingContext,
                             ?sifted : (int64 * obj) []) =
 
     let sc = match streamingContext with None -> new StreamingContext() | Some sc -> sc
@@ -137,7 +137,7 @@ and [<AutoSerializable(false); Sealed>]
     let mutable currentId = 0L
     let isUnsifting = Option.isSome sifted
     let objCache = new Dictionary<int64, obj> ()
-    do 
+    do
         match sifted with
         | None -> ()
         | Some s -> for id,value in s do objCache.Add(id, value)
@@ -145,7 +145,7 @@ and [<AutoSerializable(false); Sealed>]
     let tyPickler = resolver.Resolve<Type> ()
 
     member __.StreamingContext = sc
-    member __.DisableSubtypeResolution = disableSubtypes
+    member __.DisableSubtypeResolution = disableSubtypeResolution
     member __.DisableAssemblyLoading = disableAssemblyLoading
 
     member internal __.PicklerResolver = resolver
@@ -167,8 +167,8 @@ and [<AutoSerializable(false); Sealed>]
         currentId <- 0L
         objCache.Clear()
 
-and [<AutoSerializable(false); Sealed>] 
-    CloneState internal (resolver : IPicklerResolver, ?streamingContext : StreamingContext, 
+and [<AutoSerializable(false); Sealed>]
+    CloneState internal (resolver : IPicklerResolver, ?streamingContext : StreamingContext,
                                 ?sifter : IObjectSifter, ?unSiftData : (int64 * obj) [] * (int64 * int64[]) []) =
 
     let sc = match streamingContext with None -> new StreamingContext() | Some sc -> sc
@@ -183,13 +183,13 @@ and [<AutoSerializable(false); Sealed>]
 
     let siftData =
         match sifter with
-        | Some s -> 
+        | Some s ->
             let state = new Dictionary<int64, obj * ResizeArray<int64>>()
             Some(s, state)
         | None -> None
-        
+
     // merges usift metadata and values in a single dictionary
-    let unsiftData = 
+    let unsiftData =
         match unSiftData with
         | Some(_, [||]) | None -> None
         | Some(values, indices) ->
@@ -209,7 +209,7 @@ and [<AutoSerializable(false); Sealed>]
     member __.StreamingContext = sc
 
     member internal __.PicklerResolver = resolver
-    member internal __.GetReferenceId(obj:obj, firstTime:byref<bool>) = 
+    member internal __.GetReferenceId(obj:obj, firstTime:byref<bool>) =
         let id = idGen.GetId(obj, &firstTime)
         if firstTime then currentId <- id
         id
@@ -219,7 +219,7 @@ and [<AutoSerializable(false); Sealed>]
     member internal __.ObjectStack = objStack
     member internal __.CyclicObjectSet = cyclicObjects
 
-    member internal __.NextNodeId() = 
+    member internal __.NextNodeId() =
         let nc = nodeCount + 1L
         nodeCount <- nc
         nc
@@ -228,7 +228,7 @@ and [<AutoSerializable(false); Sealed>]
     member internal __.SiftData = siftData
     member internal __.DeclareProperSubtype() = nodeCount <- nodeCount - 1L
     /// Creates a sift pair using provided sifted value.
-    member internal __.CreateSift (value : 'T) = 
+    member internal __.CreateSift (value : 'T) =
         let _,dict = Option.get siftData
         let indices = Array.zeroCreate<int64 * int64 []> dict.Count
         let values = Array.zeroCreate<int64 * obj> dict.Count

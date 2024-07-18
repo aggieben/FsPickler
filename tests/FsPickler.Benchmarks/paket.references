@@ -1,7 +1,0 @@
-﻿group Testing
-  FSharp.Core
-  FsCheck
-  BenchmarkDotNet
-  Wire
-  protobuf-net
-  Newtonsoft.Json
