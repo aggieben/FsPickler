@@ -6,6 +6,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <IsPackable>true</IsPackable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;PROTECT_STACK_OVERFLOWS;EMIT_IL</DefineConstants>
@@ -68,8 +69,9 @@
     <Compile Include="FsPickler\ExtensionMethods.fs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="paket.references" />
     <None Include="Test.fsx" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+  </ItemGroup>
 </Project>
