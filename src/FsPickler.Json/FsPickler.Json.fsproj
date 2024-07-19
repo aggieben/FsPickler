@@ -5,6 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <IsPackable>true</IsPackable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Common.fs" />
@@ -14,11 +15,12 @@
     <Compile Include="BsonFormat.fs" />
     <Compile Include="JsonSerializer.fs" />
     <Compile Include="Combinators.fs" />
-    <None Include="paket.references" />
     <None Include="Test.fsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FsPickler\FsPickler.fsproj" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="[13.0.*,)"/>
+  </ItemGroup>
 </Project>
